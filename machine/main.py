@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns 
 import plotly.express as px
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 df = pd.read_csv(r'C:\Users\kelec\source\repos\House-Price-Predictor\Housing.csv')
 print(df.head())
@@ -42,7 +46,7 @@ def loop():
         plt.title(feat)
         plt.show()
 
-loop()
+#loop()
 # use dummy on funishingstatus
 # check correlation of hotwaterheating with price
 
@@ -70,7 +74,35 @@ print(df.columns)
 print(df.head(20))
 print(df)
 print(df.groupby('hotwaterheating')['price'].mean())
+print(df.corr(numeric_only=True)['price'].sort_values(ascending=True))
+
 
 # data is cleaned
 
-# standardize the values
+print(df.info())
+print(df.describe())
+
+# spliting data
+X = df.drop('price', axis = 1)
+y=df['price']
+scaler = StandardScaler()
+
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=.4, random_state=101)
+
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+preds = model.predict(X_test)
+
+mse = mean_squared_error(y_test, preds)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, preds)
+r2 = r2_score(y_test, preds)
+
+print(f"MSE : {mse:.4f}")
+print(f"RMSE: {rmse:.4f}")
+print(f"MAE : {mae:.4f}")
+print(f"R²  : {r2:.4f}")
