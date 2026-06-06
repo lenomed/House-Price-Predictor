@@ -238,7 +238,7 @@ This project teaches:
 
 ## 📚 Dependencies Details
 
-```
+``` 
 pandas>=1.0.0         # Data manipulation
 numpy>=1.18.0         # Numerical operations
 scikit-learn>=0.24.0  # ML algorithms & metrics
